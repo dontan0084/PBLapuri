@@ -1,0 +1,15 @@
+FROM python:3.12-slim
+
+WORKDIR /backend
+
+RUN pip install --no-cache-dir uv
+
+COPY pyproject.toml uv.lock ./
+
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv
+
+RUN uv sync --frozen
+
+COPY . ./
+
+CMD ["uv", "run", "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
